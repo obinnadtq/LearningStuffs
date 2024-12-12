@@ -2,7 +2,21 @@ namespace LearnStuff.DesignPatterns.Observer;
 
 public abstract class Stock(string symbol, double price)
 {
-    private List<IInvestor> investors = [];
+    public event EventHandler<PriceChangedEvent> PriceChanged = null!;
+    protected virtual void OnPriceChanged(PriceChangedEvent @event)
+    {
+        PriceChanged?.Invoke(this, @event);
+    }
+    
+    public void Attach(IInvestor investor)
+    {
+        PriceChanged += investor.Update;
+    }
+    
+    public void Detach(IInvestor investor)
+    {
+        PriceChanged -= investor.Update;
+    }
 
     public double Price
     {
@@ -13,28 +27,8 @@ public abstract class Stock(string symbol, double price)
             if (price != value)
             {
                 price = value;
-                Notify();
+                OnPriceChanged(new PriceChangedEvent { Symbol = symbol, Price = price});
             }
-        }
-    }
-
-    public string Symbol { get; } = symbol;
-
-    public void Attach(IInvestor investor)
-    {
-        investors.Add(investor);
-    }
-    
-    public void Detach(IInvestor investor)
-    {
-        investors.Remove(investor);
-    }
-
-    public void Notify()
-    {
-        foreach (var investor in investors)
-        {
-            investor.Update(this);
         }
     }
 }

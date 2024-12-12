@@ -2,5 +2,5 @@ namespace LearnStuff.DesignPatterns.Observer;
 
 public interface IInvestor
 {
-    void Update(Stock stock);
+    void Update(object? sender, PriceChangedEvent @event);
 }

@@ -1,6 +1,3 @@
 namespace LearnStuff.DesignPatterns.Observer;
 
-public class IBM(string symbol, double price) : Stock(symbol, price)
-{
-    
-}
+public class IBM(double price) : Stock("IBM", price);
